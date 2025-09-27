@@ -1,1 +1,65 @@
-hi
+# Day 2: Timing Libraries, Synthesis Approaches, and Efficient Flip-Flop Coding
+
+Welcome to Day 2 of the RTL Workshop. This day covers three crucial topics:
+- Understanding the `.lib` timing library (sky130_fd_sc_hd__tt_025C_1v80.lib) used in open-source PDKs.
+- Comparing hierarchical vs. flat synthesis methods.
+- Exploring efficient coding styles for flip-flops in RTL design.
+
+---
+
+
+# Contents
+
+- [Timing Libraries](#timing-libraries)
+  - [SKY130 PDK Overview](#sky130-pdk-overview)
+  - [Decoding tt_025C_1v80 in the SKY130 PDK](#decoding-tt_025c_1v80-in-the-sky130-pdk)
+  - [Opening and Exploring the .lib File](#opening-and-exploring-the-lib-file)
+
+- [Hierarchical vs. Flattened Synthesis](#hierarchical-vs-flattened-synthesis)
+  - [Hierarchical Synthesis](#hierarchical-synthesis)
+  - [Flattened Synthesis](#flattened-synthesis)
+  - [Key Differences](#key-differences)
+
+- [Flip-Flop Coding Styles](#flip-flop-coding-styles)
+  - [Asynchronous Reset D Flip-Flop](#asynchronous-reset-d-flip-flop)
+  - [Asynchronous Set D Flip-Flop](#asynchronous-set-d-flip-flop)
+  - [Synchronous Reset D Flip-Flop](#synchronous-reset-d-flip-flop)
+
+- [Simulation and Synthesis Workflow](#simulation-and-synthesis-workflow)
+  - [Icarus Verilog Simulation](#icarus-verilog-simulation)
+  - [Synthesis with Yosys](#synthesis-with-yosys)
+
+---
+
+
+## Timing Libraries
+
+### SKY130 PDK Overview
+
+The SKY130 PDK is an open-source Process Design Kit based on SkyWater Technology's 130nm CMOS technology. It provides essential models and libraries for integrated circuit (IC) design, including timing, power, and process variation information.
+
+### Decoding tt_025C_1v80 in the SKY130 PDK
+
+- **tt**: Typical process corner.
+- **025C**: Represents a temperature of 25°C, relevant for temperature-dependent performance.
+- **1v80**: Indicates a core voltage of 1.8V.
+
+This naming convention clarifies which process, voltage, and temperature conditions the library models.
+
+---
+
+### Opening and Exploring the .lib File
+
+To open the sky130_fd_sc_hd__tt_025C_1v80.lib file:
+
+1. **Install a text editor:**
+   ```shell
+   sudo apt install gedit
+   ```
+2. **Open the file:**
+   ```shell
+   gedit sky130_fd_sc_hd__tt_025C_1v80.lib
+   ```
+
+   
+
