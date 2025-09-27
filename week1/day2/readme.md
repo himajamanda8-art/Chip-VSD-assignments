@@ -61,5 +61,173 @@ To open the sky130_fd_sc_hd__tt_025C_1v80.lib file:
    gedit sky130_fd_sc_hd__tt_025C_1v80.lib
    ```
 
+    ![Alt Text]!<img width="1813" height="913" alt="day2(1)" src="https://github.com/user-attachments/assets/17636c1e-1c59-43cf-bf6d-ad6f8a7e9987" />
+
+    ---
+
+## Hierarchical vs. Flattened Synthesis
+
+### Hierarchical Synthesis
+
+- **Definition**: Retains the module hierarchy as defined in RTL, synthesizing modules separately.
+- **How it Works**: Tools like Yosys process each module independently, using commands such as `hierarchy` to analyze and set up the design structure.
+
+**Advantages:**
+- Faster synthesis time for large designs.
+- Improved debugging and analysis due to maintained module boundaries.
+- Modular approach, aiding integration with other tools.
+
+**Disadvantages:**
+- Cross-module optimizations are limited.
+- Reporting can require additional configuration.
+
+**Example:**
+
+ ![Alt Text]!<img width="1794" height="664" alt="day2(2)" src="https://github.com/user-attachments/assets/d4f97555-6ce4-433d-9149-792bd7c5e671" />
+
+ ---
+
+### Flattened Synthesis
+
+- **Definition**: Merges all modules into a single flat netlist, eliminating hierarchy.
+- **How it Works**: The `flatten` command in Yosys collapses the hierarchy, allowing whole-design optimizations.
+
+**Advantages:**
+- Enables aggressive, cross-module optimizations.
+- Results in a unified netlist, sometimes simplifying downstream processes.
+
+**Disadvantages:**
+- Longer runtime for large designs.
+- Loss of hierarchy complicates debugging and reporting.
+- Can increase memory usage and netlist complexity.
+
+**Example:**
+
+ ![Alt Text]!<img width="1806" height="885" alt="day2(3)" src="https://github.com/user-attachments/assets/1a613bae-d0d3-463f-b1e8-20701e8c67a9" />
+
+ ---
+
+### Key Differences
+
+| Aspect                | Hierarchical Synthesis             | Flattened Synthesis           |
+|-----------------------|------------------------------------|------------------------------|
+| Hierarchy             | Preserved                          | Collapsed                    |
+| Optimization Scope    | Module-level only                  | Whole-design                 |
+| Runtime               | Faster for large designs           | Slower for large designs     |
+| Debugging             | Easier (traces to RTL)             | Harder                       |
+| Output Complexity     | Modular structure                  | Single, complex netlist      |
+| Use Case              | Modularity, analysis, reporting    | Maximum optimization         |
+
+---
+
+## Flip-Flop Coding Styles
+
+Flip-flops are fundamental sequential elements in digital design, used to store binary data. Below are efficient coding styles for different reset/set behaviors.
+
+### Asynchronous Reset D Flip-Flop
+
+```verilog
+module dff_asyncres (input clk, input async_reset, input d, output reg q);
+  always @ (posedge clk, posedge async_reset)
+    if (async_reset)
+      q <= 1'b0;
+    else
+      q <= d;
+endmodule
+```
+- **Asynchronous reset**: Overrides clock, setting q to 0 immediately.
+- **Edge-triggered**: Captures d on rising clock edge if reset is low.
+
+### Asynchronous Set D Flip-Flop
+
+```verilog
+module dff_async_set (input clk, input async_set, input d, output reg q);
+  always @ (posedge clk, posedge async_set)
+    if (async_set)
+      q <= 1'b1;
+    else
+      q <= d;
+endmodule
+```
+- **Asynchronous set**: Overrides clock, setting q to 1 immediately.
+
+### Synchronous Reset D Flip-Flop
+
+```verilog
+module dff_syncres (input clk, input async_reset, input sync_reset, input d, output reg q);
+  always @ (posedge clk)
+    if (sync_reset)
+      q <= 1'b0;
+    else
+      q <= d;
+endmodule
+```
+- **Synchronous reset**: Takes effect only on the clock edge.
+
+---
+
+## Simulation and Synthesis Workflow
+
+### Icarus Verilog Simulation
+
+1. **Compile:**
+   ```shell
+   iverilog dff_asyncres.v tb_dff_asyncres.v
+   ```
+2. **Run:**
+   ```shell
+   ./a.out
+   ```
+3. **View Waveform:**
+   ```shell
+   gtkwave tb_dff_asyncres.vcd
+   ```
+
+    ![Alt Text]!<img width="1748" height="794" alt="day2(4)" src="https://github.com/user-attachments/assets/d008a6eb-4447-4616-8c50-e7eb065757b9" />
+
+    ### Synthesis with Yosys
+
+1. Start Yosys:
+   ```shell
+   yosys
+   ```
+2. Read Liberty library:
+   ```shell
+   read_liberty -lib /address/to/your/sky130/file/sky130_fd_sc_hd__tt_025C_1v80.lib
+   ```
+3. Read Verilog code:
+   ```shell
+   read_verilog /path/to/dff_asyncres.v
+   ```
+4. Synthesize:
+   ```shell
+   synth -top dff_asyncres
+   ```
+5. Map flip-flops:
+   ```shell
+   dfflibmap -liberty /address/to/your/sky130/file/sky130_fd_sc_hd__tt_025C_1v80.lib
+   ```
+6. Technology mapping:
+   ```shell
+   abc -liberty /address/to/your/sky130/file/sky130_fd_sc_hd__tt_025C_1v80.lib
+   ```
+7. Visualize the gate-level netlist:
+   ```shell
+   show
+   ```
+
+ ![Alt Text]!<img width="1803" height="727" alt="day2(5)" src="https://github.com/user-attachments/assets/852cf0f3-f5eb-4690-a2e1-2d33d13165b8" />
+
+ ---
+## Summary
+This overview provides you with practical insights into timing libraries, synthesis strategies, and reliable coding practices for flip-flops. Continue experimenting with these concepts to deepen your understanding of RTL design and synthesis.
+
+   
+
+
+
+
+
+
    
 
